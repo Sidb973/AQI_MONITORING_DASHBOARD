@@ -1,9 +1,8 @@
-numpy
-pandas
-plotly.express
 streamlit
-plotly.graph_objects
-hashlib
-datetime
-math
-os
+pandas
+numpy
+plotly
+scikit-learn
+umap-learn
+hdbscan
+prophet
