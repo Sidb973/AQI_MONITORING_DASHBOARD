@@ -647,7 +647,7 @@ with tab1:
             mode='lines', name=city
         ))
     fig.update_layout(height=500, title=f"{pollutant} Trend")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     st.caption("Interpretation: Higher volatility or consistently elevated lines indicate systemic pollution issues. Sudden spikes often correspond to events or seasonal factors.")
 
@@ -659,7 +659,7 @@ with tab1:
         heat = hourly.pivot(index="City", columns="Hour", values=pollutant)
         fig2 = px.imshow(heat, aspect="auto", color_continuous_scale="Reds")
         fig2.update_layout(height=700, title="Hourly Pollution Profile")
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
         st.caption("Interpretation: Cities with heavy vehicular dominance show AM/PM peaks. Industrial cities show flatter patterns.")
 
@@ -671,7 +671,7 @@ with tab2:
 
     corr = city_day_view[numeric_columns(city_day_view)].corr()
     figc = px.imshow(corr, text_auto=True, title="Pollutant Correlation Matrix", aspect="auto")
-    st.plotly_chart(figc, use_container_width=True)
+    st.plotly_chart(figc, width="stretch")
 
     st.caption("Interpretation: High correlation with AQI indicates pollution sources strongly influencing overall air quality. NO₂ ~ traffic, SO₂ ~ industry, PM2.5 ~ mixed sources.")
 
@@ -683,7 +683,7 @@ with tab2:
         hover_name=cluster_df["City"],
         title="City Clusters (UMAP/PCA)"
     )
-    st.plotly_chart(figcl, use_container_width=True)
+    st.plotly_chart(figcl, width="stretch")
     st.caption("Cities in the same cluster share similar pollutant signatures — meaning similar sources and policy needs.")
 
 
@@ -702,7 +702,7 @@ with tab3:
         x="Max_Gap_Days", y="StationName", orientation="h"
     )
     figgap.update_layout(height=700)
-    st.plotly_chart(figgap, use_container_width=True)
+    st.plotly_chart(figgap, width="stretch")
 
     st.subheader("Station Marker Classification")
     sm = classify_station_markers(station_day)
@@ -743,7 +743,7 @@ fig_scatter = px.scatter(
 )
 
 fig_scatter.update_layout(legend_title="Seasonal_Flag (0/1)", height=600)
-st.plotly_chart(fig_scatter, use_container_width=True)
+st.plotly_chart(fig_scatter, width="stretch")
 
 st.markdown(
     "Interpretation: Stations high on the x-axis are industrial-characteristic (high SO₂/NOx). "
@@ -788,7 +788,7 @@ fig_city = px.scatter(
 )
 
 fig_city.update_layout(height=650)
-st.plotly_chart(fig_city, use_container_width=True)
+st.plotly_chart(fig_city, width="stretch")
 
 st.markdown(
     "Interpretation: Cities in the upper-right have both industrial & vehicular signatures. "
@@ -828,7 +828,7 @@ fig_stack.add_trace(go.Bar(
     name="Seasonal flagged (count)"
 ))
 fig_stack.update_layout(barmode="stack", title="Cluster-wise counts of flagged stations", height=500)
-st.plotly_chart(fig_stack, use_container_width=True)
+st.plotly_chart(fig_stack, width="stretch")
 
 st.markdown("Interpretation: This shows which clusters are dominated by industrial/vehicular/seasonal flagged stations. Use this to prioritize cluster-level interventions.")
 
@@ -845,7 +845,7 @@ if "Reliability_Score" in sh.columns:
         title="Station markers colored by Reliability Score (size = seasonal_range)"
     )
     fig_rel.update_layout(height=600)
-    st.plotly_chart(fig_rel, use_container_width=True)
+    st.plotly_chart(fig_rel, width="stretch")
 
 
 
@@ -889,7 +889,7 @@ fig_map = px.scatter_mapbox(
     height=600
 )
 fig_map.update_layout(mapbox_style="open-street-map")
-st.plotly_chart(fig_map, use_container_width=True)
+st.plotly_chart(fig_map, width="stretch")
 
 st.markdown("Map legend: Color by MarkerType (stations can have multiple flags). Bubble size = industrial score (you can inspect hover data for vehicular/seasonal).")
 
@@ -935,7 +935,7 @@ with tab4:
 )
 
     figm.update_layout(height=800)
-    st.plotly_chart(figm, use_container_width=True)
+    st.plotly_chart(figm, width="stretch")
 
     st.subheader("Diwali Impact (±7 days)")
     di = seas["diwali"].copy()
@@ -988,7 +988,7 @@ with tab5:
         ))
 
     figan.update_layout(height=600, title="Anomaly Markers (Red Points)")
-    st.plotly_chart(figan, use_container_width=True)
+    st.plotly_chart(figan, width="stretch")
 
     st.caption("Anomalies often correspond to industrial leaks, construction fires, festival bursts, or meteorological stagnation events.")
 
@@ -1018,7 +1018,7 @@ with tab5:
                 figf.add_trace(go.Scatter(x=ts["ds"], y=ts["y"], name="History"))
                 figf.add_trace(go.Scatter(x=forecast["ds"], y=forecast["yhat"], name="Forecast"))
                 figf.update_layout(height=600)
-                st.plotly_chart(figf, use_container_width=True)
+                st.plotly_chart(figf, width="stretch")
             else:
                 st.error("Prophet not installed. Install it to enable forecasting.")
 
@@ -1058,7 +1058,7 @@ fig_emb = px.scatter(
     title="Station Embedding (UMAP/PCA)"
 )
 fig_emb.update_traces(marker=dict(size=8))
-st.plotly_chart(fig_emb, use_container_width=True)
+st.plotly_chart(fig_emb, width="stretch")
 
 sel_station = st.selectbox("Select Station", options=embed["StationId"].astype(str))
 prof = station_day[station_day["StationId"].astype(str)==sel_station]
@@ -1069,7 +1069,7 @@ if not prof.empty:
     fp = prof[numeric].mean()
     fig_fp = px.bar(x=fp.index, y=fp.values, labels={"x":"Pollutant","y":"Mean Value"},
                     title=f"Pollutant Fingerprint of Station {sel_station}")
-    st.plotly_chart(fig_fp, use_container_width=True)
+    st.plotly_chart(fig_fp, width="stretch")
 
 
 st.caption("Dashboard enforces zero-exclusion. All rows retained. All charts update dynamically.")
