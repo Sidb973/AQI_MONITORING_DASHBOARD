@@ -1,0 +1,9 @@
+numpy
+pandas
+plotly.express
+streamlit
+plotly.graph_objects
+hashlib
+datetime
+math
+os
