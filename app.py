@@ -74,12 +74,13 @@ def numeric_columns(df, exclude=None):
 #############################################
 @st.cache_data
 def load_and_clean_all():
-
+    url1 = "https://github.com/Sidb973/AQI_MONITORING_DASHBOARD/releases/download/filed/Copy.of.city_hour.csv"
+    url2 = "https://github.com/Sidb973/AQI_MONITORING_DASHBOARD/releases/download/filed/Copy.of.station_hour.csv"
     stations = pd.read_csv(find_csv("stations.csv"))
     city_day = pd.read_csv(find_csv("city_day.csv"))
     station_day = pd.read_csv(find_csv("station_day.csv"))
-    city_hour = pd.read_csv(find_csv("city_hour.csv"))
-    station_hour = pd.read_csv(find_csv("station_hour.csv"))
+    city_hour = pd.read_csv(url1)
+    station_hour = pd.read_csv(url2)
     raw_city_day = city_day.copy()
     raw_station_day = station_day.copy()
 
