@@ -24,6 +24,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import warnings
 
+# Silence the HDBSCAN syntax warning
+warnings.filterwarnings("ignore", category=SyntaxWarning, module="hdbscan")
 # Silence the HDBSCAN syntax warning (library issue)
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="hdbscan")
 
