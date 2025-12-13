@@ -22,6 +22,19 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+import warnings
+
+# Silence the HDBSCAN syntax warning (library issue)
+warnings.filterwarnings("ignore", category=SyntaxWarning, module="hdbscan")
+
+# Silence the Pandas GroupBy deprecation warning
+warnings.filterwarnings("ignore", message=".*DataFrameGroupBy.apply operated on the grouping columns.*")
+
+# Silence the UMAP n_jobs warning
+warnings.filterwarnings("ignore", message=".*n_jobs value 1 overridden.*")
+
+# Silence the Plotly deprecation warning (if you didn't fix it manually)
+warnings.filterwarnings("ignore", message=".*scatter_mapbox is deprecated.*")
 
 # Optional imports
 try:
@@ -80,7 +93,7 @@ def load_and_clean_all():
     city_day = pd.read_csv(find_csv("city_day.csv"))
     station_day = pd.read_csv(find_csv("station_day.csv"))
     city_hour = pd.read_csv(url1)
-    station_hour = pd.read_csv(url2)
+    station_hour = pd.read_csv(url2 , low_memory=False)
     raw_city_day = city_day.copy()
     raw_station_day = station_day.copy()
 
@@ -878,7 +891,7 @@ def dominant_marker(row):
 
 map_df["MarkerType"] = map_df.apply(dominant_marker, axis=1)
 
-fig_map = px.scatter_mapbox(
+fig_map = px.scatter_map(  # <--- CHANGED NAME
     map_df,
     lat="Latitude", lon="Longitude",
     color="MarkerType",
@@ -888,7 +901,8 @@ fig_map = px.scatter_mapbox(
     zoom=4,
     height=600
 )
-fig_map.update_layout(mapbox_style="open-street-map")
+# Update style for the new map type
+fig_map.update_layout(map_style="open-street-map") # <--- CHANGED PARAMETER NAME
 st.plotly_chart(fig_map, width="stretch")
 
 st.markdown("Map legend: Color by MarkerType (stations can have multiple flags). Bubble size = industrial score (you can inspect hover data for vehicular/seasonal).")
