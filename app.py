@@ -1092,21 +1092,23 @@ col_improve, col_deteriorate = st.columns(2)
 
 with col_improve:
     st.markdown("### 🌟 Most Improved (Largest Drop in AQI)")
-    # Sort by smallest (most negative) change
     improved = yoy_data.sort_values("YoY_Change", ascending=True).head(10)
-    st.dataframe(
-        improved[["City", "Year", "AQI", "Prev_Year_AQI", "YoY_Change"]].style.format("{:.1f}"),
-        use_container_width=True
-    )
+    
+    # FIX: Round the data directly instead of using .style.format
+    display_imp = improved[["City", "Year", "AQI", "Prev_Year_AQI", "YoY_Change"]].copy()
+    display_imp[["AQI", "Prev_Year_AQI", "YoY_Change"]] = display_imp[["AQI", "Prev_Year_AQI", "YoY_Change"]].round(1)
+    
+    st.dataframe(display_imp, use_container_width=True)
 
 with col_deteriorate:
     st.markdown("### ⚠️ Greatest Deterioration (Largest Rise in AQI)")
-    # Sort by largest (most positive) change
     deteriorated = yoy_data.sort_values("YoY_Change", ascending=False).head(10)
-    st.dataframe(
-        deteriorated[["City", "Year", "AQI", "Prev_Year_AQI", "YoY_Change"]].style.format("{:.1f}"),
-        use_container_width=True
-    )
+    
+    # FIX: Round the data directly instead of using .style.format
+    display_det = deteriorated[["City", "Year", "AQI", "Prev_Year_AQI", "YoY_Change"]].copy()
+    display_det[["AQI", "Prev_Year_AQI", "YoY_Change"]] = display_det[["AQI", "Prev_Year_AQI", "YoY_Change"]].round(1)
+    
+    st.dataframe(display_det, use_container_width=True)
 
 # Visualization
 st.markdown("### Annual Change Distribution")
