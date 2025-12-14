@@ -1,3 +1,21 @@
+import warnings
+
+# Silence the HDBSCAN syntax warning
+warnings.filterwarnings("ignore", category=SyntaxWarning, module="hdbscan")
+# Silence the HDBSCAN syntax warning (library issue)
+warnings.filterwarnings("ignore", category=SyntaxWarning, module="hdbscan")
+
+# Silence the Pandas GroupBy deprecation warning
+warnings.filterwarnings("ignore", message=".*DataFrameGroupBy.apply operated on the grouping columns.*")
+
+# Silence the UMAP n_jobs warning
+warnings.filterwarnings("ignore", message=".*n_jobs value 1 overridden.*")
+
+# Silence the Plotly deprecation warning (if you didn't fix it manually)
+warnings.filterwarnings("ignore", message=".*scatter_mapbox is deprecated.*")
+
+warnings.filterwarnings("ignore", category=SyntaxWarning)
+
 ##############################
 # ADVANCED AIR QUALITY DASHBOARD — FINAL VERSION
 # Zero Exclusion • Vulnerability Metrics • Clustering • Seasonality • Forecasting
@@ -22,21 +40,6 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
-import warnings
-
-# Silence the HDBSCAN syntax warning
-warnings.filterwarnings("ignore", category=SyntaxWarning, module="hdbscan")
-# Silence the HDBSCAN syntax warning (library issue)
-warnings.filterwarnings("ignore", category=SyntaxWarning, module="hdbscan")
-
-# Silence the Pandas GroupBy deprecation warning
-warnings.filterwarnings("ignore", message=".*DataFrameGroupBy.apply operated on the grouping columns.*")
-
-# Silence the UMAP n_jobs warning
-warnings.filterwarnings("ignore", message=".*n_jobs value 1 overridden.*")
-
-# Silence the Plotly deprecation warning (if you didn't fix it manually)
-warnings.filterwarnings("ignore", message=".*scatter_mapbox is deprecated.*")
 
 # Optional imports
 try:
