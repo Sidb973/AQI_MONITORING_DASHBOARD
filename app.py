@@ -1092,7 +1092,7 @@ with col_improve:
     display_imp = improved[["City", "Year", "AQI", "Prev_Year_AQI", "YoY_Change"]].copy()
     display_imp[["AQI", "Prev_Year_AQI", "YoY_Change"]] = display_imp[["AQI", "Prev_Year_AQI", "YoY_Change"]].round(1)
     
-    st.dataframe(display_imp, use_container_width=True)
+    st.dataframe(display_imp, width="stretch")
 
 with col_deteriorate:
     st.markdown("### ⚠️ Greatest Deterioration (Largest Rise in AQI)")
@@ -1102,7 +1102,7 @@ with col_deteriorate:
     display_det = deteriorated[["City", "Year", "AQI", "Prev_Year_AQI", "YoY_Change"]].copy()
     display_det[["AQI", "Prev_Year_AQI", "YoY_Change"]] = display_det[["AQI", "Prev_Year_AQI", "YoY_Change"]].round(1)
     
-    st.dataframe(display_det, use_container_width=True)
+    st.dataframe(display_det, width="stretch")
 
 # Visualization
 st.markdown("### Annual Change Distribution")
@@ -1115,7 +1115,7 @@ fig_yoy = px.bar(
     title="Top 10 Improvements vs. Deteriorations (Mixed Years)",
     labels={"YoY_Change": "Change in AQI (Negative = Better)"}
 )
-st.plotly_chart(fig_yoy, use_container_width=True)
+st.plotly_chart(fig_yoy, width="stretch")
 
 #############################################
 # STATION CLUSTER EXPLORER (BOTTOM SECTION)
