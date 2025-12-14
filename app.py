@@ -41,33 +41,27 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 
-# Optional imports
-try:
-    import umap
-    UMAP_AVAILABLE = True
-except:
-    UMAP_AVAILABLE = False
+# ------------------------------------------------
+# SAFE MODE IMPORTS (Prevents Python 3.13 Crashes)
+# ------------------------------------------------
 
-try:
-    import hdbscan
-    HDBSCAN_AVAILABLE = True
-except:
-    HDBSCAN_AVAILABLE = False
+# HDBSCAN causes hard crashes on Py3.13 -> FORCE OFF
+HDBSCAN_AVAILABLE = False 
 
-try:
-    from prophet import Prophet
-    PROPHET_AVAILABLE = True
-except:
-    PROPHET_AVAILABLE = False
+# Prophet can also cause stability issues on Py3.13 -> FORCE OFF for now
+PROPHET_AVAILABLE = False 
 
+# Keep Sklearn (it is usually stable)
 try:
     from sklearn.preprocessing import StandardScaler
     from sklearn.cluster import KMeans
     from sklearn.decomposition import PCA
     from sklearn.ensemble import IsolationForest
     SKLEARN_AVAILABLE = True
-except:
+except Exception as e:
     SKLEARN_AVAILABLE = False
+
+# Remove any other try/except blocks for hdbscan/prophet to avoid accidental loading
 
 
 #############################################
