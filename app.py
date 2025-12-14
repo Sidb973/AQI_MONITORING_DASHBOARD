@@ -232,6 +232,28 @@ def compute_city_kpis(city_day):
 
     return g
 
+#############################################
+# YEAR-ON-YEAR CHANGE ANALYSIS
+#############################################
+@st.cache_data
+def compute_yoy_changes(city_day):
+    # 1. Calculate Annual Average AQI per City
+    annual = city_day.groupby(["City", "Year"])["AQI"].mean().reset_index()
+    
+    # 2. Sort to ensure years are in order
+    annual = annual.sort_values(["City", "Year"])
+    
+    # 3. Calculate Difference (Current Year - Previous Year)
+    # A positive change means AQI increased (Deterioration)
+    # A negative change means AQI decreased (Improvement)
+    annual["Prev_Year_AQI"] = annual.groupby("City")["AQI"].shift(1)
+    annual["YoY_Change"] = annual["AQI"] - annual["Prev_Year_AQI"]
+    
+    # 4. Remove the first year for each city (NaNs)
+    yoy = annual.dropna(subset=["YoY_Change"]).copy()
+    
+    return yoy
+
 
 #############################################
 # DEFENSIVE STATION HEALTH FUNCTION (FINAL VERSION)
@@ -1060,7 +1082,44 @@ with tab6:
 6. **Expand sensor density** in Tier-1 & Tier-2 cities with high variability.
     """)
 
+st.subheader("📊 Largest Year-on-Year Changes")
 
+# Compute the changes
+yoy_data = compute_yoy_changes(city_day)
+
+# Create two columns for Best (Improvement) and Worst (Deterioration)
+col_improve, col_deteriorate = st.columns(2)
+
+with col_improve:
+    st.markdown("### 🌟 Most Improved (Largest Drop in AQI)")
+    # Sort by smallest (most negative) change
+    improved = yoy_data.sort_values("YoY_Change", ascending=True).head(10)
+    st.dataframe(
+        improved[["City", "Year", "AQI", "Prev_Year_AQI", "YoY_Change"]].style.format("{:.1f}"),
+        use_container_width=True
+    )
+
+with col_deteriorate:
+    st.markdown("### ⚠️ Greatest Deterioration (Largest Rise in AQI)")
+    # Sort by largest (most positive) change
+    deteriorated = yoy_data.sort_values("YoY_Change", ascending=False).head(10)
+    st.dataframe(
+        deteriorated[["City", "Year", "AQI", "Prev_Year_AQI", "YoY_Change"]].style.format("{:.1f}"),
+        use_container_width=True
+    )
+
+# Visualization
+st.markdown("### Annual Change Distribution")
+fig_yoy = px.bar(
+    pd.concat([improved, deteriorated]), 
+    x="YoY_Change", 
+    y="City", 
+    color="Year", 
+    orientation='h',
+    title="Top 10 Improvements vs. Deteriorations (Mixed Years)",
+    labels={"YoY_Change": "Change in AQI (Negative = Better)"}
+)
+st.plotly_chart(fig_yoy, use_container_width=True)
 
 #############################################
 # STATION CLUSTER EXPLORER (BOTTOM SECTION)
